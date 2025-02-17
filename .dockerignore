@@ -1,0 +1,46 @@
+# Maven
+# target/  # 注释掉这行，因为我们需要JAR文件用于Docker构建
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+.classpath
+.project
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+build-docker.sh
+.dockerignore
+
+# Documentation
+README*
+*.md
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+*~
