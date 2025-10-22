@@ -10,11 +10,11 @@ public class KafkaConsumerService {
 
     @KafkaListener(topics = "calculate-input", groupId = "tethys-group")
     public void listenTestTopic(String message) {
-        System.out.println("Received from calculate-input: " + message);
+        log.info("Received from calculate-input: {}", message);
     }
 
     @KafkaListener(topics = "calculate-output", groupId = "tethys-group")
     public void listenScheduledTopic(String message) {
-        System.out.println("Received from scheduled-topic: " + message);
+        log.info("Received from scheduled-output: {}", message);
     }
 }
