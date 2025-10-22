@@ -1,9 +1,11 @@
-package com.ganten.tethys;
+package com.ganten.tethys.kafka;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class KafkaProducerService {
 
@@ -15,6 +17,7 @@ public class KafkaProducerService {
     }
 
     public void sendMessage(String topic, String message) {
+        log.info("Sent message: {} to {}", message, topic);
         kafkaTemplate.send(topic, message);
     }
 

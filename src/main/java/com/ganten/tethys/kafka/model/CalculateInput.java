@@ -1,4 +1,4 @@
-package com.ganten.tethys;
+package com.ganten.tethys.kafka.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
