@@ -48,7 +48,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.gantenx.raffles.RafflesApplication</mainClass>
+                            <mainClass>com.ganten.tethys.TethysApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
