@@ -1,6 +1,6 @@
 # 🔥 1. Arrays & Hashing (≈25 problems)
 
-1. Two Sum
+1. [Two Sum](https://leetcode.com/problems/two-sum/)
 217. Contains Duplicate
 219. Contains Duplicate II
 220. Contains Duplicate III
