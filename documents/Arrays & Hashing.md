@@ -237,31 +237,31 @@ for (int i = 0; i < n; i++) {
 - 功能：解决「存在重复元素 III」问题，判断数组中是否有索引差≤indexDiff且数值差≤valueDiff的元素对。
 - 核心：用「桶排序」将数值分组，通过哈希表维护滑动窗口内的桶，快速判断是否存在满足条件的元素对（时间复杂度O(n)）。
 - 关键设计：桶大小=valueDiff+1（保证同桶元素满足数值差条件）、数值平移（处理负数）、滑动窗口（处理索引差条件）。
-36. Valid Sudoku
+# 36. Valid Sudoku
 
 ```java
 
 ```
 
-73. Set Matrix Zeroes
+# 73. Set Matrix Zeroes
 
 ```java
 
 ```
 
-128. Longest Consecutive Sequence
+# 128. Longest Consecutive Sequence
 
 ```java
 
 ```
 
-169. Majority Element
+# 169. Majority Element
 
 ```java
 
 ```
 
-229. Majority Element II
+# 229. Majority Element II
 
 ```java
 
@@ -297,61 +297,61 @@ for (int i = 0; i < n; i++) {
 
 ```
 
-53. Maximum Subarray
+# 53. Maximum Subarray
 
 ```java
 
 ```
 
-42. Trapping Rain Water
+# 42. Trapping Rain Water
 
 ```java
 
 ```
 
-15. 3Sum
+# 15. 3Sum
 
 ```java
 
 ```
 
-16. 3Sum Closest
+# 16. 3Sum Closest
 
 ```java
 
 ```
 
-18. 4Sum
+# 18. 4Sum
 
 ```java
 
 ```
 
-66. Plus One
+# 66. Plus One
 
 ```java
 
 ```
 
-287. Find the Duplicate Number
+# 287. Find the Duplicate Number
 
 ```java
 
 ```
 
-268. Missing Number
+# 268. Missing Number
 
 ```java
 
 ```
 
-54. Spiral Matrix
+# 54. Spiral Matrix
 
 ```java
 
 ```
 
-48. Rotate Image
+# 48. Rotate Image
 
 ```java
 
