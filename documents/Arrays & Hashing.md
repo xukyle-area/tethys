@@ -237,49 +237,247 @@ for (int i = 0; i < n; i++) {
 - 功能：解决「存在重复元素 III」问题，判断数组中是否有索引差≤indexDiff且数值差≤valueDiff的元素对。
 - 核心：用「桶排序」将数值分组，通过哈希表维护滑动窗口内的桶，快速判断是否存在满足条件的元素对（时间复杂度O(n)）。
 - 关键设计：桶大小=valueDiff+1（保证同桶元素满足数值差条件）、数值平移（处理负数）、滑动窗口（处理索引差条件）。
-# 36. Valid Sudoku
+
+# 36. [Valid Sudoku](https://leetcode.com/problems/valid-sudoku/description/)
 
 ```java
+package com.ganten.tethys;
+
+public class Solution {
+    public boolean isValidSudoku(char[][] board) {
+        int[][] cols = new int[9][9];
+        int[][] rows = new int[9][9];
+        int[][][] subboxes = new int[3][3][9];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                char c = board[i][j];
+                if (c != '.') {
+                    int index = c - '0' - 1;
+                    rows[i][index]++;
+                    cols[j][index]++;
+                    subboxes[i / 3][j / 3][index]++;
+                    if (rows[i][index] > 1 || cols[j][index] > 1 || subboxes[i / 3][j / 3][index] > 1) {
+                        return false;
+                    }
+
+                }
+            }
+        }
+        return true;
+    }
+}
 
 ```
 
-# 73. Set Matrix Zeroes
+# 73. [Set Matrix Zeroes](https://leetcode.com/problems/set-matrix-zeroes/description/)
 
 ```java
+package com.ganten.tethys;
+
+public class Solution {
+    private static final int MM = -7349234;
+
+    public void setZeroes(int[][] matrix) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                if (matrix[i][j] == 0) {
+                    this.setZeroes(matrix, i, j);
+                }
+            }
+        }
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                if (matrix[i][j] == MM) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+    }
+
+    public void setZeroes(int[][] matrix, int i, int j) {
+        for (int i2 = 0; i2 < matrix.length; i2++) {
+            if (matrix[i2][j] != 0) {
+                matrix[i2][j] = MM;
+            }
+        }
+        for (int j2 = 0; j2 < matrix[0].length; j2++) {
+            if (matrix[i][j2] != 0) {
+                matrix[i][j2] = MM;
+            }
+        }
+    }
+}
+```
+
+# 128. [Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence/description/)
+
+```java
+package com.ganten.tethys;
+
+import java.util.HashMap;
+
+public class Solution {
+    public int longestConsecutive(int[] nums) {
+        int result = 0;
+        // start with <key>, the longest length <length> of consecutive sequence
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            map.put(num, 1);
+        }
+        for (int num : nums) {
+            int nextNum = num;
+            int count = map.getOrDefault(nextNum, 0);
+            result = Math.max(count, result);
+            if (count == 0) {
+                continue;
+            }
+            while (true) {
+                nextNum++;
+                int nextCount = map.getOrDefault(nextNum, 0);
+                if (nextCount == 0) {
+                    break;
+                }
+                count = count + nextCount;
+                map.remove(nextNum);
+                map.put(num, count);
+                result = Math.max(count, result);
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        int[] array = new int[] {1, 0, 1, 2};
+        int mm = solution.longestConsecutive(array);
+        System.out.println(mm);
+    }
+}
+```
+
+# 169. [Majority Element](https://leetcode.com/problems/majority-element/description/)
+
+```java
+package com.ganten.tethys;
+
+public class Solution {
+    public int majorityElement(int[] nums) {
+        int result = 0;
+        int count = 0;
+        for (int n : nums) {
+            if (count == 0) {
+                result = n;
+                count++;
+            } else if (n == result) {
+                count++;
+            } else {
+                count--;
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        int[] array = new int[] {3, 2, 3};
+        int mm = solution.majorityElement(array);
+        System.out.println(mm);
+    }
+}
 
 ```
 
-# 128. Longest Consecutive Sequence
+# 229. [Majority Element II](https://leetcode.com/problems/majority-element-ii/description/)
 
 ```java
+package com.ganten.tethys;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+public class Solution {
+    public List<Integer> majorityElement(int[] nums) {
+        Map<Integer, Integer> hashMap = new HashMap<>();
+        for (int n : nums) {
+            int co = hashMap.getOrDefault(n, 0);
+            co++;
+            hashMap.put(n, co);
+        }
+        List<Integer> arrayList = new ArrayList<>();
+        for (Entry<Integer, Integer> entry : hashMap.entrySet()) {
+            if (entry.getValue() > nums.length / 3) {
+                arrayList.add(entry.getKey());
+            }
+        }
+        return arrayList;
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        int[] array = new int[] {1,2};
+        List<Integer> mm = solution.majorityElement(array);
+        System.out.println(mm);
+    }
+}
 ```
 
-# 169. Majority Element
+# 238. [Product of Array Except Self](https://leetcode.com/problems/product-of-array-except-self/description/)
 
 ```java
+package com.ganten.tethys;
 
+public class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int[] resultArray = new int[nums.length];
+        int count = this.countOfZero(nums);
+        int multiply = 1;
+        for (int n : nums) {
+            if (n != 0)
+                multiply *= n;
+        }
+        if (count == 1) {
+            int index = this.indexOfZero(nums);
+            resultArray[index] = multiply;
+        } else if (count == 0) {
+            for (int i = 0; i < nums.length; i++) {
+                resultArray[i] = multiply / nums[i];
+            }
+        }
+        return resultArray;
+    }
+
+    public int countOfZero(int[] nums) {
+        int result = 0;
+        for (int num : nums) {
+            if (num == 0) {
+                result++;
+            }
+        }
+        return result;
+    }
+
+    public int indexOfZero(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 0) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        int[] array = new int[] {1, 2, 3, 4};
+        int[] mm = solution.productExceptSelf(array);
+        System.out.println(mm);
+    }
+}
 ```
 
-# 229. Majority Element II
-
-```java
-
-```
-
-# 41. First Missing Positive
-
-```java
-
-```
-
-# 238. Product of Array Except Self
-
-```java
-
-```
-
-# 560. Subarray Sum Equals K
+# 560. [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/description/)
 
 ```java
 

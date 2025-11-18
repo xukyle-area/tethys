@@ -1,42 +1,48 @@
 package com.ganten.tethys;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Solution {
-    public boolean containsNearbyAlmostDuplicate(int[] nums, int indexDiff, int valueDiff) {
-        int min = Integer.MAX_VALUE, n = nums.length;
+    public int[] productExceptSelf(int[] nums) {
+        int[] resultArray = new int[nums.length];
+        int count = this.countOfZero(nums);
+        int multiply = 1;
+        for (int n : nums) {
+            if (n != 0)
+                multiply *= n;
+        }
+        if (count == 1) {
+            int index = this.indexOfZero(nums);
+            resultArray[index] = multiply;
+        } else if (count == 0) {
+            for (int i = 0; i < nums.length; i++) {
+                resultArray[i] = multiply / nums[i];
+            }
+        }
+        return resultArray;
+    }
+
+    public int countOfZero(int[] nums) {
+        int result = 0;
         for (int num : nums) {
-            min = Math.min(min, num);
-        }
-        // index -> value
-        Map<Integer, Integer> buckets = new HashMap<>();
-        int bucketSize = valueDiff + 1;
-        for (int i = 0; i < n; i++) {
-            if (i > indexDiff) {
-                int rm = nums[i - indexDiff - 1];
-                int bktId = (rm - min) / bucketSize;
-                buckets.remove(bktId);
-            }
-            int cur = nums[i];
-            int bktId = (cur - min) / bucketSize;
-            if (buckets.containsKey(bktId)) {
-                return true;
-            }
-            buckets.put(bktId, cur);
-            if (buckets.containsKey(bktId - 1) && Math.abs(buckets.get(bktId - 1) - cur) <= valueDiff) {
-                return true;
-            }
-            if (buckets.containsKey(bktId + 1) && Math.abs(buckets.get(bktId + 1) - cur) <= valueDiff) {
-                return true;
+            if (num == 0) {
+                result++;
             }
         }
-        return false;
+        return result;
+    }
+
+    public int indexOfZero(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 0) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        int[] nums = {1, 2, 3, 1};
-        System.out.println(solution.containsNearbyAlmostDuplicate(nums, 3, 0));
+        int[] array = new int[] {1, 2, 3, 4};
+        int[] mm = solution.productExceptSelf(array);
+        System.out.println(mm);
     }
 }
