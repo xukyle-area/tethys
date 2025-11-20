@@ -1,0 +1,149 @@
+# Trees
+
+## Basic DFS/BFS
+
+### 104. [Maximum Depth](https://leetcode.com/problems/maximum-depth-of-binary-tree/)
+```java
+
+```
+
+### 100. [Same Tree](https://leetcode.com/problems/same-tree/)
+```java
+
+```
+
+### 101. [Symmetric Tree](https://leetcode.com/problems/symmetric-tree/)
+```java
+
+```
+
+### 226. [Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/)
+```java
+
+```
+
+### 112. [Path Sum](https://leetcode.com/problems/path-sum/)
+```java
+
+```
+
+### 113. [Path Sum II](https://leetcode.com/problems/path-sum-ii/)
+```java
+
+```
+
+### 437. [Path Sum III](https://leetcode.com/problems/path-sum-iii/)
+```java
+
+```
+
+### 257. [Binary Tree Paths](https://leetcode.com/problems/binary-tree-paths/)
+```java
+
+```
+
+### 129. [Sum Root to Leaf Numbers](https://leetcode.com/problems/sum-root-to-leaf-numbers/)
+```java
+
+```
+
+## Traversal
+
+### 94. [Inorder](https://leetcode.com/problems/binary-tree-inorder-traversal/)
+```java
+
+```
+
+### 144. [Preorder](https://leetcode.com/problems/binary-tree-preorder-traversal/)
+```java
+
+```
+
+### 145. [Postorder](https://leetcode.com/problems/binary-tree-postorder-traversal/)
+```java
+
+```
+
+### 102. [Level Order](https://leetcode.com/problems/binary-tree-level-order-traversal/)
+```java
+
+```
+
+### 103. [Zigzag Level Order](https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/)
+```java
+
+```
+
+## BST
+
+### 98. [Validate BST](https://leetcode.com/problems/validate-binary-search-tree/)
+```java
+
+```
+
+### 701. [Insert into BST](https://leetcode.com/problems/insert-into-a-binary-search-tree/)
+```java
+
+```
+
+### 450. [Delete Node in BST](https://leetcode.com/problems/delete-node-in-a-bst/)
+```java
+
+```
+
+### 230. [Kth Smallest in BST](https://leetcode.com/problems/kth-smallest-element-in-a-bst/)
+```java
+
+```
+
+### 235. [LCA of BST](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
+```java
+
+```
+
+### 236. [LCA of BT](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/)
+```java
+
+```
+
+## Tree DP & Hard
+
+### 124. [Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/)
+```java
+
+```
+
+### 110. [Balanced Binary Tree](https://leetcode.com/problems/balanced-binary-tree/)
+```java
+
+```
+
+### 105. [Construct Tree from Preorder + Inorder](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+```java
+
+```
+
+### 106. [Construct Tree from Inorder + Postorder](https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)
+```java
+
+```
+
+### 108. [Convert Sorted Array to BST](https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/)
+```java
+
+```
+
+### 208. [Trie (actually Trie category)](https://leetcode.com/problems/implement-trie-prefix-tree/)
+```java
+
+```
+
+### 211. [Add & Search Word](https://leetcode.com/problems/design-add-and-search-words-data-structure/)
+```java
+
+```
+
+### 212. [Word Search II](https://leetcode.com/problems/word-search-ii/)
+```java
+
+```

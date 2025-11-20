@@ -229,8 +229,9 @@ class Solution {
 }
 ```
 
-# Longest Repeating Character Replacement
+# [Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/description/)
 ```java
+
 ```
 
 # Minimum Size Subarray Sum
