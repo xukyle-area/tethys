@@ -3,8 +3,7 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) {
         Solution solution = new Solution();
-        int[] xx = new int[] {2, 0, 1};
-        solution.sortColors(xx);
-        System.out.println(Arrays.toString(xx));
+        int[] xx = new int[] {-4, -1, 0, 3, 10};
+        System.out.println(Arrays.toString(solution.sortedSquares(xx)));
     }
 }

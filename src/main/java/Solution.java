@@ -1,26 +1,19 @@
 class Solution {
-    public void sortColors(int[] nums) {
+    public int[] sortedSquares(int[] nums) {
+        int[] result = new int[nums.length];
         int left = 0;
         int right = nums.length - 1;
-        int curr = 0;
-
-        while (curr <= right) {
-            if (nums[curr] == 0) {
-                swap(nums, left, curr);
+        int index = nums.length - 1;
+        while (left <= right) {
+            if (Math.abs(nums[left]) > nums[right]) {
+                result[index] = nums[left] * nums[left];
                 left++;
-                curr++;
-            } else if (nums[curr] == 2) {
-                swap(nums, curr, right);
-                right--;
             } else {
-                curr++;
+                result[index] = nums[right] * nums[right];
+                right--;
             }
+            index--;
         }
-    }
-
-    private void swap(int[] nums, int i, int j) {
-        int temp = nums[i];
-        nums[i] = nums[j];
-        nums[j] = temp;
+        return result;
     }
 }

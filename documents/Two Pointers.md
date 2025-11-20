@@ -306,22 +306,88 @@ class Solution {
 }
 ```
 
-# 26. Remove Duplicates from Sorted Array
+# 26. [Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/description/)
 ```java
-
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        int slow = 1;
+        int fast = 1;
+        while (fast < nums.length) {
+            if (nums[fast] == nums[slow - 1]) {
+                fast++;
+            } else {
+                nums[slow++] = nums[fast++];
+            }
+        }
+        return slow;
+    }
+}
 ```
 
-# 27. Remove Element
+# 27. [Remove Element](https://leetcode.com/problems/remove-element/description/)
 ```java
-
+class Solution {
+    public int removeElement(int[] nums, int val) {
+        int slow = 0;
+        int fast = 0;
+        while (fast < nums.length) {
+            if (nums[fast] == val) {
+                fast++;
+                continue;
+            }
+            nums[slow++] = nums[fast++];
+        }
+        return slow;
+    }
+}
 ```
 
-# 80. Remove Duplicates II
+# 80. [Remove Duplicates II](https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/description/)
 ```java
-
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        int fast = 0;
+        int slow = 0;
+        int current = -1;
+        int count = 0;
+        while (fast < nums.length) {
+            if (nums[fast] == current) {
+                if (count < 2) {
+                    count++;
+                    nums[slow++] = nums[fast++];
+                } else {
+                    fast++;
+                }
+            } else {
+                current = nums[fast];
+                nums[slow++] = nums[fast++];
+                count = 1;
+            }
+        }
+        return slow;
+    }
+}
 ```
 
-# 977. Squares of a Sorted Array
+# 977. [Squares of a Sorted Array](https://leetcode.com/problems/squares-of-a-sorted-array/description/)
 ```java
-
+class Solution {
+    public int[] sortedSquares(int[] nums) {
+        int[] result = new int[nums.length];
+        int left = 0;
+        int right = nums.length - 1;
+        int index = nums.length - 1;
+        while (left <= right) {
+            if (Math.abs(nums[left]) > nums[right]) {
+                result[index] = nums[left] * nums[left];
+                left++;
+            } else {
+                result[index] = nums[right] * nums[right];
+                right--;
+            }
+            index--;
+        }
+        return result;
+    }
+}
 ```
