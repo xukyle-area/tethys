@@ -171,6 +171,7 @@ class Solution {
 # [Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/description/)
 过程如下：
 
+```java
 nums = [1, 3, -1, -3, 5, 3, 6, 7], k = 3
 
 i=0: deque=[0(1)]
@@ -194,6 +195,7 @@ i=7: deque=[7(7)]           // 7最大, 移除所有
      ans[5] = nums[7] = 7
 
 结果: [3, 3, 5, 5, 6, 7]
+```
 
 ```java
 import java.util.ArrayDeque;
