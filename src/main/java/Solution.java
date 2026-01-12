@@ -1,31 +1,34 @@
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 class Solution {
-    public int[] maxSlidingWindow(int[] nums, int k) {
-        int[] ans = new int[nums.length - k + 1];
-        Deque<Integer> deque = new ArrayDeque<>(); // 存储索引，保持单调递减
 
-        for (int i = 0; i < nums.length; i++) {
-            // 1. 移除不在窗口内的索引
-            if (!deque.isEmpty() && deque.peekFirst() < i - k + 1) {
-                deque.pollFirst();
-            }
-
-            // 2. 移除所有比当前元素小的索引（维护单调递减）
-            while (!deque.isEmpty() && nums[deque.peekLast()] < nums[i]) {
-                deque.pollLast();
-            }
-
-            // 3. 添加当前索引
-            deque.offerLast(i);
-
-            // 4. 记录答案（窗口形成后）
-            if (i >= k - 1) {
-                ans[i - k + 1] = nums[deque.peekFirst()];
+    public int trap(int[] heights) {
+        int highestIndex = -1;
+        int highest = -1;
+        for (int i = 0; i < heights.length; i++) {
+            if (highest < heights[i]) {
+                highest = heights[i];
+                highestIndex = i;
             }
         }
-
-        return ans;
+        // 左边墙index
+        int leftHeight = 0;
+        int sumDeep = 0;
+        for (int cur = 0; cur < highestIndex; cur++) {
+            int curHeight = heights[cur];
+            if (leftHeight <= curHeight) {
+                leftHeight = curHeight;
+            } else {
+                sumDeep = sumDeep + leftHeight - curHeight;
+            }
+        }
+        int rightHeight = 0;
+        for (int cur = heights.length - 1; cur > highestIndex; cur--) {
+            int curHeight = heights[cur];
+            if (rightHeight <= curHeight) {
+                rightHeight = curHeight;
+            } else {
+                sumDeep = sumDeep + rightHeight - curHeight;
+            }
+        }
+        return sumDeep;
     }
 }

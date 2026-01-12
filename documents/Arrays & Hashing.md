@@ -480,31 +480,153 @@ public class Solution {
 # 560. [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/description/)
 
 ```java
+import java.util.HashMap;
 
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(0, 1);
+
+        int sum = 0, count = 0;
+        for (int n : nums) {
+            sum += n;
+            if (map.containsKey(sum - k)) {
+                count += map.get(sum - k);
+            }
+            map.put(sum, map.getOrDefault(sum, 0) + 1);
+        }
+        return count;
+    }
+}
 ```
 
 # 523. Continuous Subarray Sum
 
-```java
+如果两个位置的前缀和模 k 的余数相同，说明这两个位置之间的子数组和是 k 的倍数
+需要检查 sum % k 是否在之前出现过
+而且子数组长度至少为 2，所以不能立即将当前的余数加入 set，应该延迟一轮
+使用 prevMod 延迟一轮加入 set，确保子数组长度 ≥ 2
+检查当前余数是否已经在 set 中出现
+如果两个位置的余数相同，它们之间的子数组和就是 k 的倍数
 
+```java
+import java.util.HashSet;
+
+class Solution {
+    public boolean checkSubarraySum(int[] nums, int k) {
+        // 存储前缀和的余数
+        HashSet<Integer> set = new HashSet<>();
+        set.add(0);
+
+        int sum = 0;
+        int prevMod = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            int mod = sum % k;
+
+            // 如果当前余数在 set 中出现过，说明找到了满足条件的子数组
+            if (set.contains(mod)) {
+                return true;
+            }
+
+            // 延迟一轮加入 set，确保子数组长度至少为 2
+            set.add(prevMod);
+            prevMod = mod;
+        }
+        return false;
+    }
+}
 ```
 
-# 525. Contiguous Array
+# 525. [Contiguous Array](https://leetcode.com/problems/contiguous-array/description/)
 
 ```java
+import java.util.HashMap;
+import java.util.Map;
 
+class Solution {
+    public int findMaxLength(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, -1); // handle case where subarray starts at index 0
+
+        int maxLen = 0;
+        int sum = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            // Treat 0 as -1
+            sum += (nums[i] == 0 ? -1 : 1);
+
+            if (map.containsKey(sum)) {
+                // Subarray between previous index and current index has equal 0s and 1s
+                maxLen = Math.max(maxLen, i - map.get(sum));
+            } else {
+                map.put(sum, i);
+            }
+        }
+
+        return maxLen;
+
+    }
+}
 ```
 
-# 53. Maximum Subarray
+# 53. [Maximum Subarray](https://leetcode.com/problems/maximum-subarray/description/)
 
 ```java
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int result = Integer.MIN_VALUE;
 
+        // dp[i] 表示 nums[i] 结尾的子数组的最大值
+        // dp[i] = max{dp[i-1] + nums[i], nums[i]}
+        int[] dp = new int[nums.length];
+
+        for (int i = 0; i < nums.length; i++) {
+            dp[i] = Math.max((i > 0 ? dp[i - 1] : 0) + nums[i], nums[i]);
+            result = Math.max(result, dp[i]);
+        }
+        return result;
+    }
+}
 ```
 
 # 42. Trapping Rain Water
 
 ```java
+class Solution {
 
+    public int trap(int[] heights) {
+        int highestIndex = -1;
+        int highest = -1;
+        for (int i = 0; i < heights.length; i++) {
+            if (highest < heights[i]) {
+                highest = heights[i];
+                highestIndex = i;
+            }
+        }
+        // 左边墙index
+        int leftHeight = 0;
+        int sumDeep = 0;
+        for (int cur = 0; cur < highestIndex; cur++) {
+            int curHeight = heights[cur];
+            if (leftHeight <= curHeight) {
+                leftHeight = curHeight;
+            } else {
+                sumDeep = sumDeep + leftHeight - curHeight;
+            }
+        }
+        int rightHeight = 0;
+        for (int cur = heights.length - 1; cur > highestIndex; cur--) {
+            int curHeight = heights[cur];
+            if (rightHeight <= curHeight) {
+                rightHeight = curHeight;
+            } else {
+                sumDeep = sumDeep + rightHeight - curHeight;
+            }
+        }
+        return sumDeep;
+    }
+}
 ```
 
 # 15. 3Sum

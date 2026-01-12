@@ -2,42 +2,222 @@
 
 ## 704. [Binary Search](https://leetcode.com/problems/binary-search/)
 ```java
-
+class Solution {
+    public int search(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] > target) {
+                right = mid - 1;
+            } else if (nums[mid] < target) {
+                left = mid + 1;
+            } else {
+                return mid;
+            }
+        }
+        return -1;
+    }
+}
 ```
 
 ## 33. [Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/)
 ```java
+class Solution {
+    public int search(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
 
+        int mid;
+        while (left <= right) {
+            mid = left + (right - left) / 2;
+            int o = nums[left];
+            int p = nums[mid];
+            int q = nums[right];
+
+            if ((q < target && target < o) || (left == right && p != target)
+                    || (right - left == 1 && o != target && q != target)) {
+                return -1;
+            }
+            if (o == target) {
+                return left;
+            }
+            if (q == target) {
+                return right;
+            }
+            if (p == target) {
+                return mid;
+            }
+            if (o < p) {
+                // o-q 内顺序
+                if (o <= target && target < p) {
+                    // o t p q
+                    right = mid - 1;
+                } else {
+                    // o p t q
+                    left = mid + 1;
+                }
+            } else {
+                if (p < target && target <= q) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+        }
+        return -1;
+    }
+}
 ```
 
 ## 81. [Search in Rotated Sorted Array II](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/)
 ```java
-
+class Solution {
+    public boolean search(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+        
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            
+            if (nums[mid] == target) {
+                return true;
+            }
+            
+            // 处理重复元素：无法判断哪边有序时，缩小搜索范围
+            if (nums[left] == nums[mid] && nums[mid] == nums[right]) {
+                left++;
+                right--;
+            }
+            // 左半部分有序
+            else if (nums[left] <= nums[mid]) {
+                if (nums[left] <= target && target < nums[mid]) {
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            }
+            // 右半部分有序
+            else {
+                if (nums[mid] < target && target <= nums[right]) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+        }
+        
+        return false;
+    }
+}
 ```
 
 ## 153. [Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
 ```java
-
+class Solution {
+    public int findMin(int[] nums) {
+        int low = 0;
+        int high = nums.length - 1;
+        while (low < high) {
+            int pivot = low + (high - low) / 2;
+            if (nums[pivot] < nums[high]) {
+                high = pivot;
+            } else {
+                low = pivot + 1;
+            }
+        }
+        return nums[low];
+    }
+}
 ```
 
 ## 154. [Find Minimum in Rotated Sorted Array II](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)
 ```java
-
+困难题，先跳过。
 ```
 
 ## 34. [Find First and Last Position](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 ```java
+class Solution {
+    public int[] searchRange(int[] nums, int target) {
+        int i = this.indexOf(nums, target, true);
+        int i1 = this.indexOf(nums, target, false);
 
+        return new int[] {i, i1};
+    }
+
+    public int indexOf(int[] nums, int target, boolean isBegin) {
+        int leftIndex = 0;
+        int rightIndex = nums.length - 1;
+        while (leftIndex <= rightIndex) {
+            int midIndex = leftIndex + (rightIndex - leftIndex) / 2;
+            if (target > nums[midIndex]) {
+                leftIndex = midIndex + 1;
+            } else if (target < nums[midIndex]) {
+                rightIndex = midIndex - 1;
+            } else {
+                if (isBegin) {
+                    if (midIndex == 0 || nums[midIndex - 1] != target) {
+                        return midIndex;
+                    } else {
+                        rightIndex = midIndex - 1;
+                    }
+                } else {
+                    if (midIndex == nums.length - 1 || nums[midIndex + 1] != target) {
+                        return midIndex;
+                    } else {
+                        leftIndex = midIndex + 1;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+}
 ```
 
 ## 74. [Search a 2D Matrix](https://leetcode.com/problems/search-a-2d-matrix/)
 ```java
-
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int i = 0;
+        int j = matrix[0].length - 1;
+        while (true) {
+            if (i >= matrix.length || j < 0) {
+                return false;
+            }
+            if (matrix[i][j] > target) {
+                j--;
+            } else if (matrix[i][j] < target) {
+                i++;
+            } else {
+                return true;
+            }
+        }
+    }
+}
 ```
 
 ## 240. [Search a 2D Matrix II](https://leetcode.com/problems/search-a-2d-matrix-ii/)
 ```java
-
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int i = 0;
+        int j = matrix[0].length - 1;
+        while (true) {
+            if (i >= matrix.length || j < 0) {
+                return false;
+            }
+            if (matrix[i][j] > target) {
+                j--;
+            } else if (matrix[i][j] < target) {
+                i++;
+            } else {
+                return true;
+            }
+        }
+    }
+}
 ```
 
 ## 875. [Koko Eating Bananas](https://leetcode.com/problems/koko-eating-bananas/)

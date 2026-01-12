@@ -233,29 +233,128 @@ class Solution {
 
 # [Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/description/)
 ```java
-
+class Solution {
+    public int characterReplacement(String s, int k) {
+        if (k == s.length())
+            return s.length();
+        int left = 0;
+        int mxFreq = 0;
+        int windowLength = 0;
+        int[] chars = new int[26];
+        for (int right = 0; right < s.length(); right++) {
+            char ch = s.charAt(right);
+            chars[ch - 'A']++;
+            int window = right - left + 1;
+            mxFreq = Math.max(mxFreq, chars[ch - 'A']);
+            if (window - mxFreq > k) {
+                chars[s.charAt(left) - 'A']--;
+                left++;
+            }
+            windowLength = Math.max(windowLength, right - left + 1);
+        }
+        return windowLength;
+    }
+}
 ```
 
-# Minimum Size Subarray Sum
+# [Minimum Size Subarray Sum](https://leetcode.com/problems/minimum-size-subarray-sum/description/)
 ```java
+class Solution {
+    public int minSubArrayLen(int target, int[] nums) {
+        int left = 0, sum = 0, minSubArray = Integer.MAX_VALUE;
+
+        for (int right = 0; right < nums.length; right++) {
+            sum += nums[right];
+
+            // 当 sum >= target 时，缩小窗口
+            while (sum >= target) {
+                minSubArray = Math.min(minSubArray, right - left + 1);
+                sum -= nums[left];
+                left++;
+            }
+        }
+
+        // 如果 minSubArray 没有更新，说明不存在符合条件的子数组
+        return minSubArray == Integer.MAX_VALUE ? 0 : minSubArray;
+    }
+}
 ```
 
-# Max Consecutive Ones III
+# [Max Consecutive Ones III](https://leetcode.com/problems/max-consecutive-ones-iii/description/)
 ```java
+class Solution {
+    
+    public int longestOnes(int[] nums, int k) {
+        int max = 0;
+        int left = 0;
+        int count = 0;
+        for (int right = 0; right < nums.length; right++) {
+            if (nums[right] == 0) {
+                count++;
+            }
+
+            while (count > k) {
+                if (nums[left] == 0) {
+                    count--;
+                }
+                left++;
+            }
+
+            max = Math.max(max, right - left + 1);
+        }
+        return max;
+    }
+
+}
 ```
 
 # Get Equal Substrings Within Budget
 ```java
+import java.util.HashMap;
+
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(0, 1);
+
+        int sum = 0, count = 0;
+        for (int n : nums) {
+            sum += n;
+            if (map.containsKey(sum - k)) {
+                count += map.get(sum - k);
+            }
+            map.put(sum, map.getOrDefault(sum, 0) + 1);
+        }
+        return count;
+    }
+}
 ```
 
-# Longest Substring with At Most K Distinct Characters
+# [Maximum Erasure Value](https://leetcode.com/problems/maximum-erasure-value/)
 ```java
-```
+import java.util.HashSet;
+import java.util.Set;
 
-# Subarrays with K Different Integers
-```java
-```
-
-# Maximum Erasure Value
-```java
+class Solution {
+    public int maximumUniqueSubarray(int[] nums) {
+        int left = 0;
+        int right = -1;
+        int sum = 0;
+        int max = 0;
+        Set<Integer> set = new HashSet<>();
+        while (right + 1 < nums.length) {
+            if (!set.contains(nums[right + 1])) {
+                right++;
+                sum += nums[right];
+                set.add(nums[right]);
+            } else {
+                sum -= nums[left];
+                set.remove(nums[left]);
+                left++;
+            }
+            max = Math.max(max, sum);
+        }
+        return max;
+    }
+}
 ```
