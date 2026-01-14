@@ -1,34 +1,10 @@
 class Solution {
-
-    public int trap(int[] heights) {
-        int highestIndex = -1;
-        int highest = -1;
-        for (int i = 0; i < heights.length; i++) {
-            if (highest < heights[i]) {
-                highest = heights[i];
-                highestIndex = i;
-            }
+    public int missingNumber(int[] nums) {
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
         }
-        // 左边墙index
-        int leftHeight = 0;
-        int sumDeep = 0;
-        for (int cur = 0; cur < highestIndex; cur++) {
-            int curHeight = heights[cur];
-            if (leftHeight <= curHeight) {
-                leftHeight = curHeight;
-            } else {
-                sumDeep = sumDeep + leftHeight - curHeight;
-            }
-        }
-        int rightHeight = 0;
-        for (int cur = heights.length - 1; cur > highestIndex; cur--) {
-            int curHeight = heights[cur];
-            if (rightHeight <= curHeight) {
-                rightHeight = curHeight;
-            } else {
-                sumDeep = sumDeep + rightHeight - curHeight;
-            }
-        }
-        return sumDeep;
+        int xSum = (0 + nums.length) * (nums.length + 1) / 2;
+        return xSum == sum ? 0 : xSum - sum;
     }
 }
