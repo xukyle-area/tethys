@@ -1,40 +1,50 @@
 class Solution {
     /**
-     * 对于数组 s，可以有以下情况：
-     * 1. 对于01背包，s 中的所有的值都是1
-     * 2. 对于完全背包，s 中的所有的值都是-1，表示无上限
-     * 3. 对于多重背包，s[i] 表示第i件物品可以取的上限
-     *
-     * @param v 背包空间
-     * @param c 物品的体积
-     * @param w 物品的价值
-     * @param s 物品的件数
-     * @return 最大价值
+     * @param v first cost
+     * @param u second cost
+     * @param c first cost of each goods
+     * @param d second cost of each goods
+     * @param w value of each goods
+     * @param s use limit of each goods
+     *   1: 01 背包
+     *  -1: no limit, 完全背包
+     *  value: 多重背包
+     * @return
      */
-    public static int solute(int v, int[] c, int[] w, int[] s) {
+    public static int solute(int v, int u, int[] c, int[] d, int[] w, int[] s) {
         int n = w.length;
-        int[] dp = new int[v + 1];
-        // 外层循环枚举每个物品
+        int[][] dp = new int[v + 1][u + 1];
+
         for (int i = 0; i < n; i++) {
             if (s[i] == 1) {
-                // 01背包：倒序，O(v)
-                for (int j = v; j >= c[i]; j--) {
-                    dp[j] = Math.max(dp[j], dp[j - c[i]] + w[i]);
+                // 01背包，逆向
+                for (int j = v; j >= 0; j--) {
+                    for (int k = u; k >= 0; k--) {
+                        if (j >= c[i] && k >= d[i]) {
+                            dp[j][k] = Math.max(dp[j][k], dp[j - c[i]][k - d[i]] + w[i]);
+                        }
+                    }
                 }
             } else if (s[i] == -1) {
-                // 完全背包：正序，O(v) - 快很多！
-                for (int j = c[i]; j <= v; j++) {
-                    dp[j] = Math.max(dp[j], dp[j - c[i]] + w[i]);
+                // 完全背包，正向
+                for (int j = 0; j <= v; j++) {
+                    for (int k = 0; k <= u; k++) {
+                        if (j >= c[i] && k >= d[i]) {
+                            dp[j][k] = Math.max(dp[j][k], dp[j - c[i]][k - d[i]] + w[i]);
+                        }
+                    }
                 }
             } else {
-                // 多重背包：倒序+枚举，O(v·s[i])
-                for (int j = v; j >= c[i]; j--) {
-                    for (int k = 1; k <= s[i] && j >= k * c[i]; k++) {
-                        dp[j] = Math.max(dp[j], dp[j - k * c[i]] + k * w[i]);
+                // 多重背包，逆向
+                for (int j = v; j >= 0; j--) {
+                    for (int k = u; k >= 0; k--) {
+                        for (int m = 1; m <= s[i] && j >= m * c[i] && k >= m * d[i]; m++) {
+                            dp[j][k] = Math.max(dp[j][k], dp[j - m * c[i]][k - m * d[i]] + m * w[i]);
+                        }
                     }
                 }
             }
         }
-        return dp[v];
+        return dp[v][u];
     }
 }
