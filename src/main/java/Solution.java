@@ -1,34 +1,24 @@
 class Solution {
-    /**
-     * 
-     * @param v 总共花费
-     * @param costs 每个的花费
-     * @param values 每个的价值
-     * @param groups 每个的分组，组 id 从 1 开始自增一直到 gCount
-     * @return
-     */
-    public static int solute(int v, int[] costs, int[] values, int[] groups) {
-        // count of groups
-        int gCount = 0;
-        for (int i : groups) {
-            gCount = Math.max(gCount, i);
-        }
-        int[][] dp = new int[gCount + 1][v + 1];
-        int n = values.length;
-
-        for (int g = 1; g <= gCount; g++) {
-            for (int j = 0; j <= v; j++) dp[g][j] = dp[g - 1][j];
-
-            for (int i = 0; i < n; i++) {
-                if (g != groups[i]) continue;
-
-                // 倒序遍历容量
-                for (int j = v; j >= costs[i]; j--) {
-                    // dp[g][j] 可能已经包含了同组其他物品的结果
-                    dp[g][j] = Math.max(dp[g][j], dp[g - 1][j - costs[i]] + values[i]);
-                }
+    public int longestValidParentheses(String s) {
+        char[] c = s.toCharArray();
+        int n = c.length;
+        int maxLength = 0;
+        int[] dp = new int[n + 1];
+        for (int i = 1; i < n; i++) {
+            int prevLength = dp[i - 1];
+            if (c[i] == '(') {
+                continue;
             }
+            if (c[i - 1] == '(') {
+                // 1, xxxx() : dp[i-2] + 2, c[i-1]=(, c[i] = )
+                dp[i] = (i - 2 >= 0 ? dp[i - 2] : 0) + 2;
+            } else if (prevLength > 0 && i - prevLength - 1 >= 0 && c[i - prevLength - 1] == '(') {
+                // 2, yyyy(xxxx) : dp[i-1] + 2 + dp[i - dp[i-1] - 2], c[i-dp[i-1]-1]=(, c[i] = )
+                // length of xxxx
+                dp[i] = prevLength + 2 + ((i - prevLength - 2) >= 0 ? dp[i - prevLength - 2] : 0);
+            }
+            maxLength = Math.max(maxLength, dp[i]);
         }
-        return dp[gCount][v];
+        return maxLength;
     }
 }
