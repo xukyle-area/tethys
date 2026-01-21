@@ -1,23 +1,17 @@
-/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode() {}
- *     ListNode(int val) { this.val = val; }
- *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
- * }
- */
+import java.util.LinkedList;
 
 class Solution {
-    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-        ListNode virtualNode = new ListNode();
-        ListNode cur = virtualNode;
-        ListNode cur1 = list1;
-        ListNode cur2 = list2;
-
-        while (true) {
-
+    public void reorderList(ListNode head) {
+        LinkedList<ListNode> linkedList = new LinkedList<ListNode>();
+        ListNode iter = head;
+        for (; iter != null; iter = iter.next) {
+            linkedList.addLast(iter);
         }
+        ListNode dummy = new ListNode();
+        iter = dummy;
+        for (boolean flag = true; !linkedList.isEmpty(); iter = iter.next, flag = !flag) {
+            iter.next = flag ? linkedList.removeFirst() : linkedList.removeLast();
+        }
+        iter.next = null;
     }
 }
