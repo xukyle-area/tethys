@@ -1,22 +1,19 @@
+import java.util.PriorityQueue;
+
 class Solution {
-    int result = 0;
+    public int findKthLargest(int[] nums, int k) {
+        // 创建容量为 k 的最小堆
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(k);
 
-    public int sumOfLeftLeaves(TreeNode root) {
-        this.helper(root, false);
-        return result;
-    }
-
-    private void helper(TreeNode node, boolean isLeft) {
-        if (node == null) {
-            return;
-        }
-        if (node.left == null && node.right == null) {
-            if (isLeft) {
-                result += node.val;
+        for (int num : nums) {
+            if (priorityQueue.size() < k) {
+                priorityQueue.add(num);
+            } else if (priorityQueue.peek() < num) {
+                priorityQueue.poll();
+                priorityQueue.add(num);
             }
-            return;
         }
-        this.helper(node.left, true);
-        this.helper(node.right, false);
+        // 返回第 k 大的元素
+        return priorityQueue.peek();
     }
 }
