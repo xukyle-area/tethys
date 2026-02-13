@@ -119,7 +119,9 @@ def generate_progress_stats():
         '10. Backtracking.md': 'Backtracking',
         '11. Dynamic Programming.md': 'Dynamic Programming',
         '12. Greedy.md': 'Greedy',
-        '13. Intervals.md': 'Intervals'
+        '13. Intervals.md': 'Intervals',
+        '14. Data Structure Design.md': 'Data Structure Design',
+        '15. String Algorithms.md': 'String Algorithms'
     }
     
     for md_file in sorted(leetcode_dir.glob('*.md')):
