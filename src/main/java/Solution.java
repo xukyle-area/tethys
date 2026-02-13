@@ -1,19 +1,45 @@
-import java.util.PriorityQueue;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 class Solution {
-    public int findKthLargest(int[] nums, int k) {
-        // 创建容量为 k 的最小堆
-        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(k);
+    public int longestSubarray(int[] nums, int limit) {
 
-        for (int num : nums) {
-            if (priorityQueue.size() < k) {
-                priorityQueue.add(num);
-            } else if (priorityQueue.peek() < num) {
-                priorityQueue.poll();
-                priorityQueue.add(num);
+        Deque<Integer> minQueue = new ArrayDeque<>();
+        Deque<Integer> maxQueue = new ArrayDeque<>();
+
+        int result = 0;
+        int left = 0;
+
+        for (int right = 0; right < nums.length; right++) {
+
+            // maintain minQueue (increasing)
+            while (!minQueue.isEmpty() && nums[minQueue.peekLast()] > nums[right]) {
+                minQueue.pollLast();
             }
+            minQueue.addLast(right);
+
+            // maintain maxQueue (decreasing)
+            while (!maxQueue.isEmpty() && nums[maxQueue.peekLast()] < nums[right]) {
+                maxQueue.pollLast();
+            }
+            maxQueue.addLast(right);
+
+            // shrink window
+            while (!maxQueue.isEmpty() && !minQueue.isEmpty()
+                    && nums[maxQueue.peekFirst()] - nums[minQueue.peekFirst()] > limit) {
+
+                if (maxQueue.peekFirst() == left) {
+                    maxQueue.pollFirst();
+                }
+                if (minQueue.peekFirst() == left) {
+                    minQueue.pollFirst();
+                }
+                left++;
+            }
+
+            result = Math.max(result, right - left + 1);
         }
-        // 返回第 k 大的元素
-        return priorityQueue.peek();
+
+        return result;
     }
 }
