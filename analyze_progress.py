@@ -20,7 +20,7 @@ def analyze_leetcode_file(filepath):
     # # 1. [Two Sum](...)
     # ## 215. [Kth Largest](...)
     # ### 70. [Climbing Stairs](...)
-    problem_pattern = r'^#{1,3}\s*(\d+)\.\s*\[([^\]]+)\]\([^)]+\)'
+    problem_pattern = r'^#{1,3}\s*(\d+)\.\s*\[([^\]]+)\]\(([^)]+)\)'
     
     problems = []
     lines = content.split('\n')
@@ -33,6 +33,7 @@ def analyze_leetcode_file(filepath):
         if match:
             problem_num = int(match.group(1))
             problem_name = match.group(2)
+            problem_url = match.group(3)
             
             # 查找后续的代码块
             j = i + 1
@@ -85,6 +86,7 @@ def analyze_leetcode_file(filepath):
             problems.append({
                 'number': problem_num,
                 'name': problem_name,
+                'url': problem_url,
                 'completed': has_code,
                 'code_length': len(code_content) if code_content else 0
             })
@@ -202,7 +204,7 @@ def generate_readme_content(stats, total_completed, total_problems):
         if completed_problems:
             readme_content += "**✅ 已完成题目**:\n"
             for problem in completed_problems[:10]:  # 只显示前10个
-                readme_content += f"{problem['number']}. [{problem['name']}](https://leetcode.com/problems/) ✅\n"
+                readme_content += f"{problem['number']}. [{problem['name']}]({problem['url']}) ✅\n"
             
             if len(completed_problems) > 10:
                 readme_content += f"... 还有 {len(completed_problems) - 10} 个已完成题目\n"
@@ -211,7 +213,7 @@ def generate_readme_content(stats, total_completed, total_problems):
         if incomplete_problems:
             readme_content += "**❌ 待完成题目**:\n"
             for problem in incomplete_problems[:8]:  # 只显示前8个未完成的
-                readme_content += f"{problem['number']}. [{problem['name']}](https://leetcode.com/problems/) ❌\n"
+                readme_content += f"{problem['number']}. [{problem['name']}]({problem['url']}) ❌\n"
             
             if len(incomplete_problems) > 8:
                 readme_content += f"... 还有 {len(incomplete_problems) - 8} 个待完成题目\n"
