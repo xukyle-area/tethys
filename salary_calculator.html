@@ -291,19 +291,19 @@
                 </div>
                 <div class="input-group">
                     <label>社保基数（元）</label>
-                    <input type="number" id="socialBase" value="35283" step="100">
+                    <input type="number" id="socialBase" value="35811" step="100">
                     <div class="checkbox-wrapper">
-                        <input type="checkbox" id="socialBaseUseMax" checked onchange="onSocialBaseCheckChange()">
-                        <label for="socialBaseUseMax">使用最高基数</label>
+                        <input type="checkbox" id="socialBaseSameAsSalary" checked onchange="onSocialBaseCheckChange()">
+                        <label for="socialBaseSameAsSalary">与薪资一致</label>
                     </div>
-                    <div class="base-info" id="socialBaseInfo">最高基数: 35,283</div>
+                    <div class="base-info" id="socialBaseInfo">最高基数: 35,811</div>
                 </div>
                 <div class="input-group">
                     <label>公积金基数（元）</label>
                     <input type="number" id="gjjBase" value="35811" step="100">
                     <div class="checkbox-wrapper">
-                        <input type="checkbox" id="gjjBaseUseMax" checked onchange="onGjjBaseCheckChange()">
-                        <label for="gjjBaseUseMax">使用最高基数</label>
+                        <input type="checkbox" id="gjjBaseSameAsSalary" checked onchange="onGjjBaseCheckChange()">
+                        <label for="gjjBaseSameAsSalary">与薪资一致</label>
                     </div>
                     <div class="base-info" id="gjjBaseInfo">最高基数: 35,811</div>
                 </div>
@@ -398,10 +398,6 @@
             INJURY_RATE_COMPANY: 0.004,
             MATERNITY_RATE_COMPANY: 0.008,
 
-            // 社保基数限制
-            SOCIAL_MIN_BASE: 6326,
-            SOCIAL_MAX_BASE: 35283,
-
             // 个税
             TAX_THRESHOLD: 5000,
 
@@ -428,10 +424,6 @@
             return num.toLocaleString('zh-CN');
         }
 
-        function clamp(value, min, max) {
-            return Math.min(Math.max(value, min), max);
-        }
-
         // ========== 获取当前最大基数 ==========
         function getMaxBase() {
             return parseFloat(document.getElementById('city').value) || 35811;
@@ -440,6 +432,7 @@
         // ========== 城市切换处理 ==========
         function onCityChange() {
             const maxBase = getMaxBase();
+            document.getElementById('socialBaseInfo').textContent = `最高基数: ${formatInteger(maxBase)}`;
             document.getElementById('gjjBaseInfo').textContent = `最高基数: ${formatInteger(maxBase)}`;
             onSalaryChange();
         }
@@ -462,27 +455,42 @@
 
         // ========== 更新社保基数 ==========
         function updateSocialBase() {
-            const checkbox = document.getElementById('socialBaseUseMax');
+            const checkbox = document.getElementById('socialBaseSameAsSalary');
             const input = document.getElementById('socialBase');
+            const salary = parseFloat(document.getElementById('monthlySalary').value) || 0;
+            const maxBase = getMaxBase();
 
             if (checkbox.checked) {
-                input.value = CONFIG.SOCIAL_MAX_BASE;
+                const actualBase = Math.min(salary, maxBase);
+                input.value = actualBase;
                 input.disabled = true;
             } else {
+                // 手动填写时也不能超过最高值
+                const currentValue = parseFloat(input.value) || 0;
+                if (currentValue > maxBase) {
+                    input.value = maxBase;
+                }
                 input.disabled = false;
             }
         }
 
         // ========== 更新公积金基数 ==========
         function updateGjjBase() {
-            const checkbox = document.getElementById('gjjBaseUseMax');
+            const checkbox = document.getElementById('gjjBaseSameAsSalary');
             const input = document.getElementById('gjjBase');
+            const salary = parseFloat(document.getElementById('monthlySalary').value) || 0;
             const maxBase = getMaxBase();
 
             if (checkbox.checked) {
-                input.value = maxBase;
+                const actualBase = Math.min(salary, maxBase);
+                input.value = actualBase;
                 input.disabled = true;
             } else {
+                // 手动填写时也不能超过最高值
+                const currentValue = parseFloat(input.value) || 0;
+                if (currentValue > maxBase) {
+                    input.value = maxBase;
+                }
                 input.disabled = false;
             }
         }
@@ -542,9 +550,10 @@
             const specialDeduction = parseFloat(document.getElementById('specialDeduction').value) || 0;
             const bonusMonths = parseFloat(document.getElementById('bonusMonths').value) || 0;
 
-            // 获取基数（直接从输入框读取）
-            const socialBase = parseFloat(document.getElementById('socialBase').value) || 0;
-            const gjjBase = parseFloat(document.getElementById('gjjBase').value) || 0;
+            // 获取基数（直接从输入框读取，但不超过最高值）
+            const maxBase = getMaxBase();
+            const socialBase = Math.min(parseFloat(document.getElementById('socialBase').value) || 0, maxBase);
+            const gjjBase = Math.min(parseFloat(document.getElementById('gjjBase').value) || 0, maxBase);
 
             // 月度五险一金
             const personalSocial = getPersonalSocialInsurance(socialBase);
