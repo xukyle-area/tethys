@@ -1,45 +1,65 @@
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Random;
 
 class Solution {
-    public int longestSubarray(int[] nums, int limit) {
 
-        Deque<Integer> minQueue = new ArrayDeque<>();
-        Deque<Integer> maxQueue = new ArrayDeque<>();
+    private LinkedList<Integer> list = new LinkedList<>();
 
-        int result = 0;
-        int left = 0;
+    public Solution() {
+        new Consumer().start();
+        new Provider().start();
+    }
 
-        for (int right = 0; right < nums.length; right++) {
-
-            // maintain minQueue (increasing)
-            while (!minQueue.isEmpty() && nums[minQueue.peekLast()] > nums[right]) {
-                minQueue.pollLast();
-            }
-            minQueue.addLast(right);
-
-            // maintain maxQueue (decreasing)
-            while (!maxQueue.isEmpty() && nums[maxQueue.peekLast()] < nums[right]) {
-                maxQueue.pollLast();
-            }
-            maxQueue.addLast(right);
-
-            // shrink window
-            while (!maxQueue.isEmpty() && !minQueue.isEmpty()
-                    && nums[maxQueue.peekFirst()] - nums[minQueue.peekFirst()] > limit) {
-
-                if (maxQueue.peekFirst() == left) {
-                    maxQueue.pollFirst();
+    /**
+     * 消费者
+     */
+    class Consumer extends Thread {
+        @Override
+        public void run() {
+            while (true) {
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    // TODO: handle exception
                 }
-                if (minQueue.peekFirst() == left) {
-                    minQueue.pollFirst();
+                synchronized (list) {
+                    if (list.size() > 0) {
+                        System.out.println(list.removeFirst());
+                    }
                 }
-                left++;
             }
-
-            result = Math.max(result, right - left + 1);
         }
+    }
 
-        return result;
+    /**
+     * 生产者
+     */
+    class Provider extends Thread {
+        Random random = new Random();
+
+        @Override
+        public void run() {
+            while (true) {
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+                synchronized (list) {
+                    list.addLast(random.nextInt(100));
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        try {
+            Thread.sleep(10000000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println("hello");
     }
 }

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>年度工资报告</title>
+<style>
+body { font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; margin: 0; }
+.container { max-width: 1200px; margin: 0 auto; }
+h1 { text-align: center; color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); margin-bottom: 30px; }
+h2 { color: #2c3e50; margin: 0 0 20px 0; padding-bottom: 10px; border-bottom: 3px solid #667eea; }
+.card { background: #fff; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); padding: 25px; margin-bottom: 30px; }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 12px 8px; text-align: right; font-weight: 500; }
+th:first-child { text-align: center; border-radius: 8px 0 0 0; }
+th:last-child { border-radius: 0 8px 0 0; }
+td { padding: 10px 8px; text-align: right; border-bottom: 1px solid #eee; }
+td:first-child { text-align: center; font-weight: 500; color: #667eea; }
+tr:hover { background: #f8f9ff; }
+tr:last-child td:first-child { border-radius: 0 0 0 8px; }
+tr:last-child td:last-child { border-radius: 0 0 8px 0; }
+.summary-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
+.summary-item { background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%); padding: 20px; border-radius: 10px; text-align: center; }
+.summary-item.highlight { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; }
+.summary-label { font-size: 14px; color: #666; margin-bottom: 8px; }
+.summary-item.highlight .summary-label { color: rgba(255,255,255,0.8); }
+.summary-value { font-size: 24px; font-weight: bold; color: #2c3e50; }
+.summary-item.highlight .summary-value { color: #fff; }
+.bonus-section { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 20px; border-radius: 10px; color: #fff; margin-bottom: 20px; }
+.bonus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; }
+.bonus-label { font-size: 12px; opacity: 0.9; }
+.bonus-value { font-size: 18px; font-weight: bold; margin-top: 5px; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>年度工资报告</h1>
+<div class="card">
+<h2>月度明细</h2>
+<table>
+<thead>
+<tr>
+<th>月份</th><th>税前工资</th><th>五险(个人)</th><th>公积金(个人)</th><th>五险(企业)</th><th>公积金(企业)</th><th>企业成本</th><th>当月个税</th><th>个人到手</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一月</td><td>48,000.00</td><td>3,707.71</td><td>4,297.32</td><td>9,596.98</td><td>4,297.32</td><td>61,894.30</td><td>989.85</td><td>39,005.12</td>
+</tr>
+<tr>
+<td>二月</td><td>48,000.00</td><td>3,707.71</td><td>4,297.32</td><td>9,596.98</td><td>4,297.32</td><td>61,894.30</td><td>3,089.14</td><td>36,905.82</td>
+</tr>
+<tr>
+<td>三月</td><td>48,000.00</td><td>3,707.71</td><td>4,297.32</td><td>9,596.98</td><td>4,297.32</td><td>61,894.30</td><td>3,299.50</td><td>36,695.47</td>
+</tr>
+<tr>
+<td>四月</td><td>48,000.00</td><td>3,707.71</td><td>4,297.32</td><td>9,596.98</td><td>4,297.32</td><td>61,894.30</td><td>3,299.50</td><td>36,695.47</td>
+</tr>
+<tr>
+<td>五月</td><td>48,000.00</td><td>3,707.71</td><td>4,297.32</td><td>9,596.98</td><td>4,297.32</td><td>61,894.30</td><td>5,396.98</td><td>34,597.99</td>
+</tr>
+<tr>
+<td>六月</td><td>48,000.00</td><td>3,707.71</td><td>4,297.32</td><td>9,596.98</td><td>4,297.32</td><td>61,894.30</td><td>6,598.99</td><td>33,395.97</td>
+</tr>
+<tr>
+<td>七月</td><td>48,000.00</td><td>3,707.71</td><td>4,297.32</td><td>9,596.98</td><td>4,297.32</td><td>61,894.30</td><td>6,598.99</td><td>33,395.97</td>
+</tr>
+<tr>
+<td>八月</td><td>48,000.00</td><td>3,707.71</td><td>4,297.32</td><td>9,596.98</td><td>4,297.32</td><td>61,894.30</td><td>6,598.99</td><td>33,395.97</td>
+</tr>
+<tr>
+<td>九月</td><td>48,000.00</td><td>3,707.71</td><td>4,297.32</td><td>9,596.98</td><td>4,297.32</td><td>61,894.30</td><td>6,598.99</td><td>33,395.97</td>
+</tr>
+<tr>
+<td>十月</td><td>48,000.00</td><td>3,707.71</td><td>4,297.32</td><td>9,596.98</td><td>4,297.32</td><td>61,894.30</td><td>8,096.48</td><td>31,898.49</td>
+</tr>
+<tr>
+<td>十一月</td><td>48,000.00</td><td>3,707.71</td><td>4,297.32</td><td>9,596.98</td><td>4,297.32</td><td>61,894.30</td><td>8,248.74</td><td>31,746.22</td>
+</tr>
+<tr>
+<td>十二月</td><td>48,000.00</td><td>3,707.71</td><td>4,297.32</td><td>9,596.98</td><td>4,297.32</td><td>61,894.30</td><td>8,248.74</td><td>31,746.22</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="card">
+<h2>年度汇总</h2>
+<div class="bonus-section">
+<div class="bonus-grid">
+<div><div class="bonus-label">年终奖（2.0个月）</div><div class="bonus-value">96,000.00 元</div></div>
+<div><div class="bonus-label">年终奖个税</div><div class="bonus-value">9,390.00 元</div></div>
+<div><div class="bonus-label">年终奖到手</div><div class="bonus-value">86,610.00 元</div></div>
+</div>
+</div>
+<div class="summary-grid">
+<div class="summary-item"><div class="summary-label">企业用人成本</div><div class="summary-value">838,731.55 元</div></div>
+<div class="summary-item"><div class="summary-label">工资个税</div><div class="summary-value">67,064.89 元</div></div>
+<div class="summary-item"><div class="summary-label">个税总额</div><div class="summary-value">76,454.89 元</div></div>
+<div class="summary-item"><div class="summary-label">公积金总额</div><div class="summary-value">103,135.68 元</div></div>
+<div class="summary-item highlight"><div class="summary-label">个人到手总额</div><div class="summary-value">499,484.68 元</div></div>
+</div>
+</div>
+</div>
+</body>
+</html>
