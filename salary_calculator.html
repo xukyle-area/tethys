@@ -185,6 +185,52 @@
             border-color: #667eea;
         }
 
+        .input-group input:disabled {
+            background-color: #f5f5f5;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        .input-group select {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            background: #fff;
+        }
+
+        .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .checkbox-wrapper label {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        .base-info {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+
         .calculate-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
@@ -218,8 +264,24 @@
             <h2>参数设置</h2>
             <div class="input-section">
                 <div class="input-group">
+                    <label>城市</label>
+                    <select id="city" onchange="onCityChange()">
+                        <option value="35811">北京 (最高 35,811)</option>
+                        <option value="44265">深圳 (最高 44,265)</option>
+                        <option value="39828">广州 (最高 39,828)</option>
+                        <option value="37302">上海 (最高 37,302)</option>
+                        <option value="25105">武汉 (最高 25,105)</option>
+                        <option value="31378">成都 (最高 31,378)</option>
+                        <option value="40694">杭州 (最高 40,694)</option>
+                        <option value="41400">南京 (最高 41,400)</option>
+                        <option value="30540">合肥 (最高 30,540)</option>
+                        <option value="27861">天津 (最高 27,861)</option>
+                        <option value="29362">重庆 (最高 29,362)</option>
+                    </select>
+                </div>
+                <div class="input-group">
                     <label>月薪（元）</label>
-                    <input type="number" id="monthlySalary" value="50000" step="1000">
+                    <input type="number" id="monthlySalary" value="50000" step="1000" onchange="onSalaryChange()">
                 </div>
                 <div class="input-group">
                     <label>专项附加扣除（元/月）</label>
@@ -227,7 +289,27 @@
                 </div>
                 <div class="input-group">
                     <label>年终奖（月数）</label>
-                    <input type="number" id="bonusMonths" value="3" step="0.5">
+                    <input type="number" id="bonusMonths" value="3" step="0.1">
+                </div>
+            </div>
+            <div class="input-section">
+                <div class="input-group">
+                    <label>社保基数（元）</label>
+                    <input type="number" id="socialBase" value="35283" step="100">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="socialBaseSameAsSalary" checked onchange="onSocialBaseCheckChange()">
+                        <label for="socialBaseSameAsSalary">与薪资一致</label>
+                    </div>
+                    <div class="base-info" id="socialBaseInfo">最高基数: 35,283</div>
+                </div>
+                <div class="input-group">
+                    <label>公积金基数（元）</label>
+                    <input type="number" id="gjjBase" value="35811" step="100">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="gjjBaseSameAsSalary" checked onchange="onGjjBaseCheckChange()">
+                        <label for="gjjBaseSameAsSalary">与薪资一致</label>
+                    </div>
+                    <div class="base-info" id="gjjBaseInfo">最高基数: 35,811</div>
                 </div>
             </div>
             <div class="btn-wrapper">
@@ -308,7 +390,6 @@
         const CONFIG = {
             // 公积金
             GJJ_RATE: 0.12,
-            GJJ_MAX_BASE: 35811,
 
             // 社保比例
             PENSION_RATE_PERSONAL: 0.08,
@@ -347,8 +428,71 @@
             return num.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
+        function formatInteger(num) {
+            return num.toLocaleString('zh-CN');
+        }
+
         function clamp(value, min, max) {
             return Math.min(Math.max(value, min), max);
+        }
+
+        // ========== 获取当前最大基数 ==========
+        function getMaxBase() {
+            return parseFloat(document.getElementById('city').value) || 35811;
+        }
+
+        // ========== 城市切换处理 ==========
+        function onCityChange() {
+            const maxBase = getMaxBase();
+            document.getElementById('gjjBaseInfo').textContent = `最高基数: ${formatInteger(maxBase)}`;
+            onSalaryChange();
+        }
+
+        // ========== 薪资变化处理 ==========
+        function onSalaryChange() {
+            updateSocialBase();
+            updateGjjBase();
+        }
+
+        // ========== 社保基数checkbox处理 ==========
+        function onSocialBaseCheckChange() {
+            updateSocialBase();
+        }
+
+        // ========== 公积金基数checkbox处理 ==========
+        function onGjjBaseCheckChange() {
+            updateGjjBase();
+        }
+
+        // ========== 更新社保基数 ==========
+        function updateSocialBase() {
+            const checkbox = document.getElementById('socialBaseSameAsSalary');
+            const input = document.getElementById('socialBase');
+            const salary = parseFloat(document.getElementById('monthlySalary').value) || 0;
+
+            if (checkbox.checked) {
+                const actualBase = clamp(salary, CONFIG.SOCIAL_MIN_BASE, CONFIG.SOCIAL_MAX_BASE);
+                input.value = actualBase;
+                input.disabled = true;
+            } else {
+                input.disabled = false;
+            }
+        }
+
+        // ========== 更新公积金基数 ==========
+        function updateGjjBase() {
+            const checkbox = document.getElementById('gjjBaseSameAsSalary');
+            const input = document.getElementById('gjjBase');
+            const salary = parseFloat(document.getElementById('monthlySalary').value) || 0;
+            const maxBase = getMaxBase();
+
+            if (checkbox.checked) {
+                const actualBase = clamp(salary, CONFIG.SOCIAL_MIN_BASE, maxBase);
+                input.value = actualBase;
+                input.disabled = true;
+            } else {
+                input.disabled = false;
+            }
         }
 
         // ========== 计算函数 ==========
@@ -406,9 +550,9 @@
             const specialDeduction = parseFloat(document.getElementById('specialDeduction').value) || 0;
             const bonusMonths = parseFloat(document.getElementById('bonusMonths').value) || 0;
 
-            // 计算基数
-            const socialBase = clamp(monthlySalary, CONFIG.SOCIAL_MIN_BASE, CONFIG.SOCIAL_MAX_BASE);
-            const gjjBase = clamp(monthlySalary, CONFIG.SOCIAL_MIN_BASE, CONFIG.GJJ_MAX_BASE);
+            // 获取基数（直接从输入框读取）
+            const socialBase = parseFloat(document.getElementById('socialBase').value) || 0;
+            const gjjBase = parseFloat(document.getElementById('gjjBase').value) || 0;
 
             // 月度五险一金
             const personalSocial = getPersonalSocialInsurance(socialBase);
@@ -486,8 +630,11 @@
             document.getElementById('totalNet').textContent = formatNumber(annualNetSalary) + ' 元';
         }
 
-        // 页面加载时自动计算一次
-        window.onload = calculate;
+        // 页面加载时初始化
+        window.onload = function () {
+            onSalaryChange();  // 初始化基数
+            calculate();       // 计算一次
+        };
     </script>
 </body>
 
