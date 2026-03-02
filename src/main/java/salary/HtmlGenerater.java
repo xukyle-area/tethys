@@ -63,7 +63,8 @@ public class HtmlGenerater {
         html.append("<h2>月度明细</h2>\n");
         html.append("<table>\n<thead>\n<tr>\n");
         html.append("<th>月份</th><th>税前工资</th><th>五险(个人)</th><th>公积金(个人)</th>");
-        html.append("<th>五险(企业)</th><th>公积金(企业)</th><th>企业成本</th><th>当月个税</th><th>个人到手</th>\n");
+        html.append(
+                "<th>五险(企业)</th><th>公积金(企业)</th><th>企业成本</th><th>应税所得</th><th>累计应税</th><th>当月个税</th><th>个人到手</th>\n");
         html.append("</tr>\n</thead>\n<tbody>\n");
 
         for (int i = 1; i <= 12; i++) {
@@ -76,10 +77,13 @@ public class HtmlGenerater {
                 html.append("<td>").append(df.format(salary.getCompanySocialInsurance(i))).append("</td>");
                 html.append("<td>").append(df.format(salary.getCompanyGjj(i))).append("</td>");
                 html.append("<td>").append(df.format(salary.getCompanyCost(i))).append("</td>");
+                html.append("<td>").append(df.format(salary.getMonthlyTaxableIncome(i))).append("</td>");
+                html.append("<td>").append(df.format(salary.getCumulativeTaxableIncome(i))).append("</td>");
                 html.append("<td>").append(df.format(salary.getMonthlyTax(i))).append("</td>");
                 html.append("<td>").append(df.format(salary.getNetSalary(i))).append("</td>");
             } else {
-                html.append("<td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>");
+                html.append(
+                        "<td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>");
             }
             html.append("\n</tr>\n");
         }

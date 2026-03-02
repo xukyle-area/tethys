@@ -389,7 +389,7 @@ public class Salary {
 
     // ========== 测试主函数 ==========
     public static void main(String[] args) throws IOException {
-        Salary salary = new Salary(48_000, 2000, 2);
+        Salary salary = new Salary(50_000, 2000, 3);
         HtmlGenerater.generateHtmlReport(salary);
     }
 }
