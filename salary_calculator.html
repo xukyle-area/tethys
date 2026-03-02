@@ -250,6 +250,64 @@
             text-align: center;
             margin-top: 10px;
         }
+
+        /* 表格容器，支持横向滚动 */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .input-section {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .input-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .bonus-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .summary-value {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .input-section {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                padding: 10px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
     </style>
 </head>
 
@@ -314,25 +372,27 @@
         <!-- 月度明细 -->
         <div class="card">
             <h2>月度明细</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>月份</th>
-                        <th>税前工资</th>
-                        <th>五险(个人)</th>
-                        <th>公积金(个人)</th>
-                        <th>五险(企业)</th>
-                        <th>公积金(企业)</th>
-                        <th>企业成本</th>
-                        <th>应税所得</th>
-                        <th>累计应税</th>
-                        <th>当月个税</th>
-                        <th>个人到手</th>
-                    </tr>
-                </thead>
-                <tbody id="monthlyTable">
-                </tbody>
-            </table>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>月份</th>
+                            <th>税前工资</th>
+                            <th>五险(个人)</th>
+                            <th>公积金(个人)</th>
+                            <th>五险(企业)</th>
+                            <th>公积金(企业)</th>
+                            <th>企业成本</th>
+                            <th>应税所得</th>
+                            <th>累计应税</th>
+                            <th>当月个税</th>
+                            <th>个人到手</th>
+                        </tr>
+                    </thead>
+                    <tbody id="monthlyTable">
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- 年度汇总 -->
