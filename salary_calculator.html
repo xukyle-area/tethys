@@ -155,7 +155,8 @@
         /* 输入表单样式 */
         .input-section {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
         }
 
         .input-group {
@@ -257,7 +258,7 @@
         }
 
         /* 响应式设计 */
-        @media (max-width: 1200px) {
+        @media (max-width: 1000px) {
             .input-section {
                 grid-template-columns: repeat(3, 1fr);
                 gap: 15px;
@@ -315,7 +316,6 @@
     <div class="container">
         <!-- 输入参数 -->
         <div class="card">
-            <h2>参数设置</h2>
             <div class="input-section">
                 <div class="input-group">
                     <label>城市</label>
@@ -346,6 +346,14 @@
                     <input type="number" id="bonusMonths" value="3" step="0.1">
                 </div>
                 <div class="input-group">
+                    <label>年终奖计税方式</label>
+                    <select id="bonusTaxMethod">
+                        <option value="separate" selected>独立计税</option>
+                        <option value="combined">合并计税</option>
+                    </select>
+                    <div class="base-info">独立计税税负较低，2027年后取消</div>
+                </div>
+                <div class="input-group">
                     <label>社保基数（元）</label>
                     <input type="number" id="socialBase" value="35811" step="100">
                     <div class="checkbox-wrapper">
@@ -362,6 +370,15 @@
                         <label for="gjjBaseSameAsSalary">与薪资一致</label>
                     </div>
                     <div class="base-info" id="gjjBaseInfo">最高基数: 35,811</div>
+                </div>
+                <div class="input-group">
+                    <label>公积金比例（%）</label>
+                    <input type="number" id="gjjRate" value="12" min="5" max="12" step="1">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="gjjRateUseMax" checked onchange="onGjjRateCheckChange()">
+                        <label for="gjjRateUseMax">默认最高</label>
+                    </div>
+                    <div class="base-info">最高比例: 12%</div>
                 </div>
             </div>
             <div class="btn-wrapper">
@@ -395,17 +412,17 @@
             </div>
         </div>
 
-        <!-- 年度汇总 -->
-        <div class="card">
-            <h2>年度汇总</h2>
-            <div class="bonus-section" id="bonusSection" style="display:none;">
+        <!-- 年终奖计税 -->
+        <div class="card" id="bonusCard" style="display:none;">
+            <h2 id="bonusCardTitle">年终奖独立计税</h2>
+            <div class="bonus-section" id="bonusSection">
                 <div class="bonus-grid">
                     <div>
                         <div class="bonus-label" id="bonusLabel">年终奖（3.0个月）</div>
                         <div class="bonus-value" id="bonusAmount">0 元</div>
                     </div>
                     <div>
-                        <div class="bonus-label">年终奖个税</div>
+                        <div class="bonus-label" id="bonusTaxLabel">年终奖个税</div>
                         <div class="bonus-value" id="bonusTax">0 元</div>
                     </div>
                     <div>
@@ -414,6 +431,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- 年度汇总 -->
+        <div class="card">
+            <h2>年度汇总</h2>
             <div class="summary-grid">
                 <div class="summary-item">
                     <div class="summary-label">企业用人成本</div>
@@ -442,9 +464,6 @@
     <script>
         // ========== 配置常量 ==========
         const CONFIG = {
-            // 公积金
-            GJJ_RATE: 0.12,
-
             // 社保比例
             PENSION_RATE_PERSONAL: 0.08,
             PENSION_RATE_COMPANY: 0.16,
@@ -511,6 +530,37 @@
             updateGjjBase();
         }
 
+        // ========== 公积金比例checkbox处理 ==========
+        function onGjjRateCheckChange() {
+            updateGjjRate();
+        }
+
+        // ========== 更新公积金比例 ==========
+        function updateGjjRate() {
+            const checkbox = document.getElementById('gjjRateUseMax');
+            const input = document.getElementById('gjjRate');
+
+            if (checkbox.checked) {
+                input.value = 12;
+                input.disabled = true;
+            } else {
+                input.disabled = false;
+                // 手动填写时也不能超过12
+                let currentValue = parseInt(input.value) || 12;
+                if (currentValue > 12) currentValue = 12;
+                if (currentValue < 5) currentValue = 5;
+                input.value = currentValue;
+            }
+        }
+
+        // ========== 获取公积金比例 ==========
+        function getGjjRate() {
+            let rate = parseInt(document.getElementById('gjjRate').value) || 12;
+            if (rate > 12) rate = 12;
+            if (rate < 5) rate = 5;
+            return rate / 100;
+        }
+
         // ========== 更新社保基数 ==========
         function updateSocialBase() {
             const checkbox = document.getElementById('socialBaseSameAsSalary');
@@ -569,11 +619,11 @@
         }
 
         function getPersonalGjj(gjjBase) {
-            return gjjBase * CONFIG.GJJ_RATE;
+            return gjjBase * getGjjRate();
         }
 
         function getCompanyGjj(gjjBase) {
-            return gjjBase * CONFIG.GJJ_RATE;
+            return gjjBase * getGjjRate();
         }
 
         function calculateCumulativeTax(cumulativeIncome) {
@@ -608,10 +658,38 @@
             const specialDeduction = parseFloat(document.getElementById('specialDeduction').value) || 0;
             const bonusMonths = parseFloat(document.getElementById('bonusMonths').value) || 0;
 
-            // 获取基数（直接从输入框读取，但不超过最高值）
+            // 获取最大值限制
             const maxBase = getMaxBase();
-            const socialBase = Math.min(parseFloat(document.getElementById('socialBase').value) || 0, maxBase);
-            const gjjBase = Math.min(parseFloat(document.getElementById('gjjBase').value) || 0, maxBase);
+            const maxGjjRate = 12;
+
+            // 获取用户输入的值
+            const socialBaseInput = parseFloat(document.getElementById('socialBase').value) || 0;
+            const gjjBaseInput = parseFloat(document.getElementById('gjjBase').value) || 0;
+            const gjjRateInput = parseInt(document.getElementById('gjjRate').value) || 12;
+
+            // 验证是否超过最大值
+            let errors = [];
+            if (socialBaseInput > maxBase) {
+                errors.push(`社保基数 ${formatInteger(socialBaseInput)} 超过最高限制 ${formatInteger(maxBase)}`);
+            }
+            if (gjjBaseInput > maxBase) {
+                errors.push(`公积金基数 ${formatInteger(gjjBaseInput)} 超过最高限制 ${formatInteger(maxBase)}`);
+            }
+            if (gjjRateInput > maxGjjRate) {
+                errors.push(`公积金比例 ${gjjRateInput}% 超过最高限制 ${maxGjjRate}%`);
+            }
+            if (gjjRateInput < 5) {
+                errors.push(`公积金比例 ${gjjRateInput}% 低于最低限制 5%`);
+            }
+
+            if (errors.length > 0) {
+                alert('输入错误：\n' + errors.join('\n'));
+                return;
+            }
+
+            // 使用验证后的值
+            const socialBase = socialBaseInput;
+            const gjjBase = gjjBaseInput;
 
             // 月度五险一金
             const personalSocial = getPersonalSocialInsurance(socialBase);
@@ -662,17 +740,39 @@
 
             // 年终奖计算
             const bonusAmount = monthlySalary * bonusMonths;
-            const bonusTax = calculateBonusTax(bonusAmount);
-            const bonusNet = bonusAmount - bonusTax;
+            const bonusTaxMethod = document.getElementById('bonusTaxMethod').value;
+            let bonusTax = 0;
+            let bonusNet = 0;
+            let bonusTaxLabel = '年终奖个税';
+            let bonusCardTitle = '年终奖独立计税';
+
+            if (bonusTaxMethod === 'separate') {
+                // 独立计税
+                bonusTax = calculateBonusTax(bonusAmount);
+                bonusNet = bonusAmount - bonusTax;
+                bonusTaxLabel = '年终奖个税（独立）';
+                bonusCardTitle = '年终奖独立计税';
+            } else {
+                // 合并计税：年终奖并入年度综合所得
+                const annualTaxableWithBonus = cumulativeTaxableIncome + bonusAmount;
+                const taxWithBonus = calculateCumulativeTax(annualTaxableWithBonus);
+                const taxWithoutBonus = calculateCumulativeTax(cumulativeTaxableIncome);
+                bonusTax = Math.max(0, taxWithBonus - taxWithoutBonus);
+                bonusNet = bonusAmount - bonusTax;
+                bonusTaxLabel = '年终奖个税（合并）';
+                bonusCardTitle = '年终奖合并计税';
+            }
 
             if (bonusMonths > 0) {
-                document.getElementById('bonusSection').style.display = 'block';
+                document.getElementById('bonusCard').style.display = 'block';
+                document.getElementById('bonusCardTitle').textContent = bonusCardTitle;
                 document.getElementById('bonusLabel').textContent = `年终奖（${bonusMonths.toFixed(1)}个月）`;
                 document.getElementById('bonusAmount').textContent = formatNumber(bonusAmount) + ' 元';
+                document.getElementById('bonusTaxLabel').textContent = bonusTaxLabel;
                 document.getElementById('bonusTax').textContent = formatNumber(bonusTax) + ' 元';
                 document.getElementById('bonusNet').textContent = formatNumber(bonusNet) + ' 元';
             } else {
-                document.getElementById('bonusSection').style.display = 'none';
+                document.getElementById('bonusCard').style.display = 'none';
             }
 
             // 年度汇总
@@ -692,6 +792,7 @@
         // 页面加载时初始化
         window.onload = function () {
             onSalaryChange();  // 初始化基数
+            updateGjjRate();   // 初始化公积金比例
             calculate();       // 计算一次
         };
     </script>
